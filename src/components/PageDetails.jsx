@@ -4,7 +4,7 @@ import "./PostDetail.css";
 export function PostDetails({ post }) {
   // replace with useQuery
   const {data,isLoading,isError} = useQuery({
-    queryKey:['post',post],
+    queryKey:['post',post?.id],
     queryFn:()=>fetchComments(post?.id)
   });
   if(isLoading){

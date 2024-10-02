@@ -2,14 +2,14 @@ import { useState } from "react"
 import { PostDetails } from "./PageDetails";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPosts } from "../libs/api";
-
+const maxPostPage = 10;
 const Post = () => {
   const [currentPage,setCurrentPage] = useState(1);
   const [selectedPost,setSelectedPost] = useState('');
 
   const {data,isLoading,isError} = useQuery({
     queryKey:['posts',currentPage],
-    queryFn:fetchPosts
+    queryFn:()=> fetchPosts(currentPage)
   })
   if(isLoading){
     return (
@@ -35,11 +35,16 @@ const Post = () => {
         ):(<p>There are no posts right now</p>)}
       </ul>
       <div className="pages">
-        <button disabled onClick={() => {}}>
+        <button disabled={currentPage <= 1} onClick={() => {
+          setCurrentPage(prevPage=> prevPage - 1);
+        }}>
           Previous page
         </button>
-        <span>Page {currentPage + 1}</span>
-        <button disabled onClick={() => {}}>
+        <span>Page {currentPage}</span>
+        <button disabled={currentPage >= maxPostPage} onClick={() => {
+                    setCurrentPage(nextPage=> nextPage + 1);
+
+        }}>
           Next page
         </button>
       </div>
